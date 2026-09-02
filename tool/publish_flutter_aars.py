@@ -19,6 +19,14 @@ source_repository = os.path.join(
     "jitlabtestingmodule",
 )
 
+generated_repository = os.path.join(
+    repository_root,
+    "build",
+    "host",
+    "outputs",
+    "repo",
+)
+
 github_group = os.environ.get(
     "GROUP",
     "com.github.DhruvPanchalSL",
@@ -119,3 +127,11 @@ for artifact_name in ("flutter_debug", "flutter_release"):
             release_version,
         )
     )
+
+# JitPack scans the project build directory before ~/.m2. Flutter's original
+# com.example...:1.0 POMs would therefore hide the republished GitHub artifacts.
+# They are generated build files and are no longer needed after the copy above.
+shutil.rmtree(generated_repository)
+print("Removed temporary Flutter Maven repository: {}".format(
+    generated_repository,
+))
