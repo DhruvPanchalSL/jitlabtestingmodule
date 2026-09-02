@@ -1,19 +1,22 @@
+import glob
 import os
 import shutil
 import xml.etree.ElementTree as ET
-from pathlib import Path
 
-repository_root = Path(__file__).resolve().parent.parent
 
-source_repository = (
-    repository_root
-    / "build"
-    / "host"
-    / "outputs"
-    / "repo"
-    / "com"
-    / "example"
-    / "jitlabtestingmodule"
+repository_root = os.path.dirname(
+    os.path.dirname(os.path.abspath(__file__))
+)
+
+source_repository = os.path.join(
+    repository_root,
+    "build",
+    "host",
+    "outputs",
+    "repo",
+    "com",
+    "example",
+    "jitlabtestingmodule",
 )
 
 github_group = os.environ.get(
@@ -36,20 +39,22 @@ published_group = "{}.{}".format(
     repository_name,
 )
 
-maven_local = (
-    Path.home()
-    / ".m2"
-    / "repository"
-    / Path(*published_group.split("."))
+maven_repository_root = os.environ.get(
+    "MAVEN_LOCAL_REPOSITORY",
+    os.path.join(os.path.expanduser("~"), ".m2", "repository"),
+)
+
+maven_local = os.path.join(
+    maven_repository_root,
+    *published_group.split(".")
 )
 
 maven_namespace = "http://maven.apache.org/POM/4.0.0"
 ET.register_namespace("", maven_namespace)
 
 for artifact_name in ("flutter_debug", "flutter_release"):
-    artifact_root = source_repository / artifact_name
-
-    aar_files = list(artifact_root.glob("*/*.aar"))
+    artifact_root = os.path.join(source_repository, artifact_name)
+    aar_files = glob.glob(os.path.join(artifact_root, "*", "*.aar"))
 
     if len(aar_files) != 1:
         raise RuntimeError(
@@ -60,27 +65,28 @@ for artifact_name in ("flutter_debug", "flutter_release"):
         )
 
     source_aar = aar_files[0]
-    source_pom = source_aar.with_suffix(".pom")
+    source_pom = os.path.splitext(source_aar)[0] + ".pom"
 
-    if not source_pom.exists():
-        raise FileNotFoundError(source_pom)
+    if not os.path.isfile(source_pom):
+        raise IOError("Missing POM: {}".format(source_pom))
 
-    destination = (
-        maven_local
-        / artifact_name
-        / release_version
+    destination = os.path.join(
+        maven_local,
+        artifact_name,
+        release_version,
     )
 
-    destination.mkdir(parents=True, exist_ok=True)
+    if not os.path.isdir(destination):
+        os.makedirs(destination)
 
-    destination_aar = (
-        destination
-        / "{}-{}.aar".format(artifact_name, release_version)
+    destination_aar = os.path.join(
+        destination,
+        "{}-{}.aar".format(artifact_name, release_version),
     )
 
-    destination_pom = (
-        destination
-        / "{}-{}.pom".format(artifact_name, release_version)
+    destination_pom = os.path.join(
+        destination,
+        "{}-{}.pom".format(artifact_name, release_version),
     )
 
     shutil.copy2(source_aar, destination_aar)
