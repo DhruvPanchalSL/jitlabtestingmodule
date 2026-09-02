@@ -31,7 +31,10 @@ release_version = os.environ.get(
     "1.0.0",
 )
 
-published_group = f"{github_group}.{repository_name}"
+published_group = "{}.{}".format(
+    github_group,
+    repository_name,
+)
 
 maven_local = (
     Path.home()
@@ -50,8 +53,10 @@ for artifact_name in ("flutter_debug", "flutter_release"):
 
     if len(aar_files) != 1:
         raise RuntimeError(
-            f"Expected exactly one AAR for {artifact_name}, "
-            f"found {len(aar_files)}"
+            "Expected exactly one AAR for {}, found {}".format(
+                artifact_name,
+                len(aar_files),
+            )
         )
 
     source_aar = aar_files[0]
@@ -70,12 +75,12 @@ for artifact_name in ("flutter_debug", "flutter_release"):
 
     destination_aar = (
         destination
-        / f"{artifact_name}-{release_version}.aar"
+        / "{}-{}.aar".format(artifact_name, release_version)
     )
 
     destination_pom = (
         destination
-        / f"{artifact_name}-{release_version}.pom"
+        / "{}-{}.pom".format(artifact_name, release_version)
     )
 
     shutil.copy2(source_aar, destination_aar)
@@ -102,6 +107,9 @@ for artifact_name in ("flutter_debug", "flutter_release"):
     )
 
     print(
-        f"Published "
-        f"{published_group}:{artifact_name}:{release_version}"
+        "Published {}:{}:{}".format(
+            published_group,
+            artifact_name,
+            release_version,
+        )
     )
