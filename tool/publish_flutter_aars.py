@@ -89,15 +89,15 @@ for artifact_name in ("flutter_debug", "flutter_release"):
     pom_root = pom_tree.getroot()
 
     pom_root.find(
-        f"{{{maven_namespace}}}groupId"
+        "{" + maven_namespace + "}groupId"
     ).text = published_group
 
     pom_root.find(
-        f"{{{maven_namespace}}}artifactId"
+        "{" + maven_namespace + "}artifactId"
     ).text = artifact_name
 
     pom_root.find(
-        f"{{{maven_namespace}}}version"
+        "{" + maven_namespace + "}version"
     ).text = release_version
 
     pom_tree.write(
