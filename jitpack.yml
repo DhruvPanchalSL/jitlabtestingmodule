@@ -6,3 +6,4 @@ before_install:
 
 install:
   - ./flutter/bin/flutter pub get && python3 tool/configure_flutter_aars.py && ./flutter/bin/flutter build aar --no-profile --no-pub && python3 tool/publish_flutter_aars.py
+  - find ~/.m2/repository/com/github/DhruvPanchalSL/jitlabtestingmodule -type f
