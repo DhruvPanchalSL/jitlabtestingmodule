@@ -1,19 +1,9 @@
-#jdk:
-#  - openjdk17
-#
-#before_install:
-#  - wget -q https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.29.2-stable.tar.xz && tar -xf flutter_linux_3.29.2-stable.tar.xz && git config --global --add safe.directory "$PWD/flutter" && ./flutter/bin/flutter config --no-analytics && ./flutter/bin/flutter --version && python3 --version
-#
-#install:
-#  - ./flutter/bin/flutter pub get && python3 tool/configure_flutter_aars.py && ./flutter/bin/flutter build aar --no-profile --no-pub && python3 tool/publish_flutter_aars.py
-#  - find ~/.m2/repository/com/github/DhruvPanchalSL/jitlabtestingmodule -type f
-
 jdk:
   - openjdk17
 
 before_install:
-  - wget -q -O "$HOME/flutter.tar.xz" https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.29.2-stable.tar.xz && tar -xf "$HOME/flutter.tar.xz" -C "$HOME" && git config --global --add safe.directory "$HOME/flutter" && "$HOME/flutter/bin/flutter" config --no-analytics && "$HOME/flutter/bin/flutter" --version && python3 --version
+  - wget -q -O "$HOME/flutter.tar.xz" https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.29.2-stable.tar.xz && tar -xf "$HOME/flutter.tar.xz" -C "$HOME" && git config --global --add safe.directory "$HOME/flutter" && $HOME/flutter/bin/flutter config --no-analytics && $HOME/flutter/bin/flutter --version && python3 --version
 
 install:
-  - "$HOME/flutter/bin/flutter" pub get && python3 tool/configure_flutter_aars.py && "$HOME/flutter/bin/flutter" build aar --no-profile --no-pub && python3 tool/publish_flutter_aars.py
-  - find "$HOME/.m2/repository/com/github/DhruvPanchalSL/jitlabtestingmodule" -type f
+  - $HOME/flutter/bin/flutter pub get && python3 tool/configure_flutter_aars.py && $HOME/flutter/bin/flutter build aar --no-profile --no-pub && python3 tool/publish_flutter_aars.py
+  - find $HOME/.m2/repository/com/github/DhruvPanchalSL/jitlabtestingmodule -type f
