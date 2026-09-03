@@ -73,7 +73,7 @@ class _NameScreenState extends State<NameScreen> {
           padding: const EdgeInsets.all(24),
           child: Text(
             hasName
-                ? 'Hello, $_name!'
+                ? 'Hello There, $_name!'
                 : 'Waiting for a name from Android...',
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.headlineMedium,
